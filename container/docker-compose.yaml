@@ -8,6 +8,10 @@ services:
     image: mysql:8.0
     volumes:
       - mysql_data:/var/lib/mysql
+      # para que o docker compose crie o esquema e dados basicos do DB na inicialização
+      # Ref: https://iamvickyav.medium.com/mysql-init-script-on-docker-compose-e53677102e48
+      - "../sql_scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "../sql_scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: theR00t!
@@ -16,8 +20,9 @@ services:
       MYSQL_PASSWORD: sgr@password
   
   sgr:
-    context: .
-    dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: always
     environment:
       MYSQL_DATABASE: sgr
