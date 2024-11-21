@@ -1,0 +1,25 @@
+version: '3.9'
+
+volumes:
+  mysql_data: {}
+
+services:
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: theR00t!
+      MYSQL_DATABASE: sgr
+      MYSQL_USER: sgr
+      MYSQL_PASSWORD: sgr@password
+  
+  sgr:
+    context: .
+    dockerfile: Dockerfile
+    restart: always
+    environment:
+      MYSQL_DATABASE: sgr
+      MYSQL_USER: sgr
+      MYSQL_PASSWORD: sgr@password
