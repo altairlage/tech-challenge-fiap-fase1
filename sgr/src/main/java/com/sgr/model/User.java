@@ -1,4 +1,4 @@
-package com.sgr.controllers;
+package com.sgr.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
