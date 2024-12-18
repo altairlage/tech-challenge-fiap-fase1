@@ -1,8 +1,8 @@
-INSERT INTO usuarios (nome, email, login, senha, ultima_alteracao, endereco, tipo) VALUES
-    ('admin', 'admin@sgr.com', 'admin', 'swordfish', '2024-11-22', 'Rua das onças, 100', 'ADMIN');
+INSERT INTO gastrohub.`user` (name, address, created_at, email, last_updated_at, username, password)
+VALUES('admin', 'Rua das onças, 100', '2024-10-15', 'admin@gastrohub.com', '2024-10-15', 'admin', 'swordfish');
 
-INSERT INTO usuarios (nome, email, login, senha, ultima_alteracao, endereco, tipo) VALUES
-    ('José Fulano', 'jose_fulano@gmail.com', 'jose_fulano', 's3nh4', '2024-10-15', 'Rua das couves, 90', 'CLIENTE');
+INSERT INTO gastrohub.`user` (name, address, created_at, email, last_updated_at, username, password)
+VALUES('José Fulano', 'Rua das couves, 90', '2024-10-15', 'jose_fulano@gmail.com', '2024-10-15', 'jose_fulano', 's3nh4');
 
-INSERT INTO usuarios (nome, email, login, senha, ultima_alteracao, endereco, tipo) VALUES
-    ('Don Leopoldo', 'don@gmail.com', 'don_leopoldo', 's3nh4', '2024-11-21', 'Rua das onças, 100', 'DONO');
+INSERT INTO gastrohub.`user` (name, address, created_at, email, last_updated_at, username, password)
+VALUES('Don Leopoldo', 'Rua das onças, 100', '2024-10-15', 'don@gmail.com', '2024-11-21', 'don_leopoldo', 's3nh4');

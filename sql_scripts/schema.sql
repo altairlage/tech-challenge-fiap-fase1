@@ -1,10 +1,10 @@
-CREATE TABLE usuarios(
+CREATE TABLE user(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255),
+    name VARCHAR(255),
     email VARCHAR(255),
-    login VARCHAR(255),
-    senha VARCHAR(255),
-    ultima_alteracao DATE,
-    endereco VARCHAR(255),
-    tipo VARCHAR(20) -- DONO, CLIENTE ou ADMIN
+    username VARCHAR(255),
+    password VARCHAR(255),
+    address VARCHAR(255),
+    created_at DATE,
+    last_updated_at DATE
 );
