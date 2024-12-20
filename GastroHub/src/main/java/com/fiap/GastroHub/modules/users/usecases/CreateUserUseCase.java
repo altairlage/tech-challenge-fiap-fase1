@@ -36,18 +36,18 @@ public class CreateUserUseCase {
         try{
             User newUser = new User();
             newUser.setName(createUserRequest.getName());
-            newUser.setUsername(createUserRequest.getUsername());
-            newUser.setAddress(createUserRequest.getAddress());
+//            newUser.setUsername(createUserRequest.getUsername());
+//            newUser.setAddress(createUserRequest.getAddress());
             newUser.setEmail(createUserRequest.getEmail());
-            newUser.setPassword(createUserRequest.getPassword());
-            newUser.setCreatedAt(Date.from(Instant.now()));
-            newUser.setLastUpdatedAt(Date.from(Instant.now()));
+//            newUser.setPassword(createUserRequest.getPassword());
+//            newUser.setCreatedAt(Date.from(Instant.now()));
+//            newUser.setLastUpdatedAt(Date.from(Instant.now()));
 
             User createdUser = userRepository.save(newUser);
 
             logger.info("New user created successfully");
-
-            return new CreateUserResponse(createdUser.getId(), createdUser.getUsername(), createdUser.getEmail());
+return new CreateUserResponse();
+//            return new CreateUserResponse(createdUser.getId(), createdUser.getUsername(), createdUser.getEmail());
         } catch (Exception e) {
             throw new AppException("Failed to create a new user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
