@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Data
 public class CreateUpdateUserRequest {
@@ -21,4 +23,8 @@ public class CreateUpdateUserRequest {
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

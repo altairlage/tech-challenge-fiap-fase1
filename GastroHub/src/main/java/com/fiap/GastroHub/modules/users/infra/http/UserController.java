@@ -3,7 +3,6 @@ package com.fiap.GastroHub.modules.users.infra.http;
 import com.fiap.GastroHub.modules.users.dtos.ChangeUserPasswordRequest;
 import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserRequest;
 import com.fiap.GastroHub.modules.users.dtos.UserResponse;
-import com.fiap.GastroHub.modules.users.infra.orm.entities.User;
 import com.fiap.GastroHub.modules.users.usecases.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,7 +65,7 @@ public class UserController {
             @PathVariable("id") Long id,
             @RequestBody CreateUpdateUserRequest request
     ) {
-        logger.info("PUT -> /users/" + id);
+        logger.info("PUT -> /users/{}", id);
         UserResponse updatedUser = updateUserUseCase.execute(id, request);
         return ResponseEntity.ok(updatedUser);
     }
@@ -76,7 +75,7 @@ public class UserController {
             @PathVariable("id") Long id,
             @RequestBody ChangeUserPasswordRequest changeUserPasswordRequest
     ) {
-        logger.info("PUT -> /users/" + id);
+        logger.info("PUT -> password/users/{}", id);
         this.changeUserPasswordUseCase.execute(id, changeUserPasswordRequest);
         var status = HttpStatus.NO_CONTENT;
         return ResponseEntity.status(status.value()).build();

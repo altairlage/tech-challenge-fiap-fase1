@@ -9,6 +9,7 @@ public class UserResponse {
     private long id;
     private String name;
     private String email;
+    private String address;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
