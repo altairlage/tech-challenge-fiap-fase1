@@ -1,24 +1,22 @@
 package com.fiap.GastroHub.modules.users.usecases;
 
+import com.fiap.GastroHub.modules.users.infra.orm.entities.User;
 import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
 import com.fiap.GastroHub.shared.AppException;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeleteUserUseCase {
-    private static final Logger logger = LogManager.getLogger(DeleteUserUseCase.class);
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public void DeleteUserUseCase(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new AppException("Usuário não encontrado", HttpStatus.BAD_REQUEST);
-        }
-        userRepository.deleteById(id);
-    }   
+    public void execute(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException("User with ID " + id + " not found", HttpStatus.BAD_REQUEST));
+        userRepository.delete(user);
+    }
 }

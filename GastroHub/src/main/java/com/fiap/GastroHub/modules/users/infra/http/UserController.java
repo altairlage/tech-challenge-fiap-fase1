@@ -22,18 +22,21 @@ public class UserController {
     private final ChangeUserPasswordUseCase changeUserPasswordUseCase;
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
 
     public UserController(CreateUserUseCase createUserUseCase,
                           UpdateUserUseCase updateUserUseCase,
                           ChangeUserPasswordUseCase changeUserPasswordUseCase,
                           GetAllUsersUseCase getAllUsersUseCase,
-                          GetUserByIdUseCase getUserByIdUseCase) {
+                          GetUserByIdUseCase getUserByIdUseCase,
+                          DeleteUserUseCase deleteUserUseCase) {
 
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.changeUserPasswordUseCase = changeUserPasswordUseCase;
         this.getAllUsersUseCase = getAllUsersUseCase;
         this.getUserByIdUseCase = getUserByIdUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
     }
 
     @PostMapping("/create")
@@ -81,4 +84,10 @@ public class UserController {
         return ResponseEntity.status(status.value()).build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        logger.info("DELETE -> /users/{}", id);
+        deleteUserUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
 }

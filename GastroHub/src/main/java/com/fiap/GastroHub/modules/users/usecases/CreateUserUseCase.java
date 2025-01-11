@@ -21,7 +21,7 @@ public class CreateUserUseCase {
     private static final Logger logger = LogManager.getLogger(CreateUserUseCase.class);
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private AesCryptoImp aesCrypto;
+    private AesCryptoImp aesCrypto; //TODO: implementar a senha criptografada.
 
     /**
      * Executes the user creation use case
