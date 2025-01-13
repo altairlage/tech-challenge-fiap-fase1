@@ -8,6 +8,9 @@ import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
 import com.fiap.GastroHub.modules.users.usecases.ChangeUserPasswordUseCase;
 import com.fiap.GastroHub.modules.users.usecases.CreateUserUseCase;
 import com.fiap.GastroHub.modules.users.usecases.UpdateUserUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +47,11 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @Operation(summary = "Obter informações")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id) {
         return new ResponseEntity<>(userRepository.findUserById(id), HttpStatus.OK);
