@@ -37,6 +37,12 @@ public class UserController {
         this.changeUserPasswordUseCase = changeUserPasswordUseCase;
     }
 
+    @Operation(summary = "Obter informações de todos os usuários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @GetMapping
     public ResponseEntity<List<User>> findAllUsers(
             @RequestParam("page") int page,
@@ -47,16 +53,23 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @Operation(summary = "Obter informações")
+    @Operation(summary = "Obter informações de um usuário")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id) {
         return new ResponseEntity<>(userRepository.findUserById(id), HttpStatus.OK);
     }
 
+    @Operation(summary = "Criar um usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @PostMapping("/create")
     public ResponseEntity<CreateUpdateUserResponse> createUser(
             @RequestBody CreateUpdateUserRequest createUpdateUserRequest
@@ -64,6 +77,12 @@ public class UserController {
         return new ResponseEntity<>(createUserUseCase.execute(createUpdateUserRequest), HttpStatus.OK);
     }
 
+    @Operation(summary = "Atualizar informações de um usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(
             @PathVariable("id") Long id,
@@ -75,6 +94,12 @@ public class UserController {
         return ResponseEntity.status(status.value()).build();
     }
 
+    @Operation(summary = "Trocar senha de um usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @PutMapping("/password/{id}")
     public ResponseEntity<Void> changeUserPassword(
             @PathVariable("id") Long id,
