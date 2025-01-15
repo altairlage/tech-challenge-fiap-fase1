@@ -8,9 +8,6 @@ import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
 import com.fiap.GastroHub.modules.users.usecases.ChangeUserPasswordUseCase;
 import com.fiap.GastroHub.modules.users.usecases.CreateUserUseCase;
 import com.fiap.GastroHub.modules.users.usecases.UpdateUserUseCase;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +26,31 @@ public class UserController {
     private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final ChangeUserPasswordUseCase changeUserPasswordUseCase;
+    private final GetAllUsersUseCase getAllUsersUseCase;
+    private final GetUserByIdUseCase getUserByIdUseCase;
+    private final DeleteUserUseCase deleteUserUseCase;
 
-    public UserController(UserRepository userRepository, CreateUserUseCase createUserUseCase, UpdateUserUseCase updateUserUseCase, ChangeUserPasswordUseCase changeUserPasswordUseCase) {
-        this.userRepository = userRepository;
+    public UserController(CreateUserUseCase createUserUseCase,
+                          UpdateUserUseCase updateUserUseCase,
+                          ChangeUserPasswordUseCase changeUserPasswordUseCase,
+                          GetAllUsersUseCase getAllUsersUseCase,
+                          GetUserByIdUseCase getUserByIdUseCase,
+                          DeleteUserUseCase deleteUserUseCase) {
+
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.changeUserPasswordUseCase = changeUserPasswordUseCase;
+        this.getAllUsersUseCase = getAllUsersUseCase;
+        this.getUserByIdUseCase = getUserByIdUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserResponse> createUser(
+            @RequestBody CreateUpdateUserRequest request
+    ) {
+        UserResponse createdUser = createUserUseCase.execute(request);
+        return ResponseEntity.ok(createdUser);
     }
 
     @Operation(summary = "Obter informações de todos os usuários")
@@ -44,12 +60,12 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @GetMapping
-    public ResponseEntity<List<User>> findAllUsers(
+    public ResponseEntity<List<UserResponse>> getAllUsers(
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
         logger.info("/users");
-        List<User> users = userRepository.findAll(PageRequest.of(page, size)).getContent();
+        List<UserResponse> users = getAllUsersUseCase.execute();
         return ResponseEntity.ok(users);
     }
 
@@ -60,21 +76,9 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable long id) {
-        return new ResponseEntity<>(userRepository.findUserById(id), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Criar um usuário")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "500", description = "Erro Interno")
-    })
-    @PostMapping("/create")
-    public ResponseEntity<CreateUpdateUserResponse> createUser(
-            @RequestBody CreateUpdateUserRequest createUpdateUserRequest
-    ) {
-        return new ResponseEntity<>(createUserUseCase.execute(createUpdateUserRequest), HttpStatus.OK);
+    public ResponseEntity<UserResponse> getUserById(@PathVariable long id) {
+        UserResponse userResponse = getUserByIdUseCase.execute(id);
+        return ResponseEntity.ok(userResponse);
     }
 
     @Operation(summary = "Atualizar informações de um usuário")
@@ -84,14 +88,13 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(
+    public ResponseEntity<UserResponse> updateUser(
             @PathVariable("id") Long id,
-            @RequestBody CreateUpdateUserRequest createUpdateUserRequest
+            @RequestBody CreateUpdateUserRequest request
     ) {
-        logger.info("PUT -> /users/" + id);
-        this.updateUserUseCase.execute(id, createUpdateUserRequest);
-        var status = HttpStatus.NO_CONTENT;
-        return ResponseEntity.status(status.value()).build();
+        logger.info("PUT -> /users/{}", id);
+        UserResponse updatedUser = updateUserUseCase.execute(id, request);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @Operation(summary = "Trocar senha de um usuário")
@@ -105,10 +108,16 @@ public class UserController {
             @PathVariable("id") Long id,
             @RequestBody ChangeUserPasswordRequest changeUserPasswordRequest
     ) {
-        logger.info("PUT -> /users/" + id);
+        logger.info("PUT -> password/users/{}", id);
         this.changeUserPasswordUseCase.execute(id, changeUserPasswordRequest);
         var status = HttpStatus.NO_CONTENT;
         return ResponseEntity.status(status.value()).build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        logger.info("DELETE -> /users/{}", id);
+        deleteUserUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,8 +1,6 @@
 package com.fiap.GastroHub.modules.users.usecases;
 
 import com.fiap.GastroHub.modules.users.dtos.ChangeUserPasswordRequest;
-import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserRequest;
-import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserResponse;
 import com.fiap.GastroHub.modules.users.infra.orm.entities.User;
 import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
 import com.fiap.GastroHub.shared.AppException;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class ChangeUserPasswordUseCase {
@@ -40,27 +37,27 @@ public class ChangeUserPasswordUseCase {
     public void execute(Long id, ChangeUserPasswordRequest changeUserPasswordRequest) {
         logger.info("Trying to change password from user with id: {}", id);
 
-        try {
-            User userFromDb = userRepository.findUserById(id);
-            if (userFromDb != null) {
-                String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
-                if (userFromDb.getPassword().equals(currentEncrypted)) {
-                    userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
-                    userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
+       try {
+           User userFromDb = userRepository.findUserById(id);
+           if (userFromDb != null) {
+               String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
+               if (userFromDb.getPassword().equals(currentEncrypted)) {
+                   userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
+                   userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
 
-                    User updatedUser = userRepository.save(userFromDb);
-                }else{
-                    throw new RuntimeException("Password does not match");
-                }
+                   User updatedUser = userRepository.save(userFromDb);
+               }else{
+                   throw new RuntimeException("Password does not match");
+               }
 
-            } else {
-                throw new RuntimeException("User not found");
-            }
+           } else {
+               throw new RuntimeException("User not found");
+           }
 
-            logger.info("Password updated successfully");
-        } catch (Exception e) {
-            throw new AppException(String.format("Failed to update user with id %d", id), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+           logger.info("Password updated successfully");
+       } catch (Exception e) {
+           throw new AppException(String.format("Failed to update user with id %d", id), HttpStatus.INTERNAL_SERVER_ERROR);
+       }
 
     }
 }
