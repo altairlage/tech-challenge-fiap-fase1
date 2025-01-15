@@ -37,27 +37,27 @@ public class ChangeUserPasswordUseCase {
     public void execute(Long id, ChangeUserPasswordRequest changeUserPasswordRequest) {
         logger.info("Trying to change password from user with id: {}", id);
 
-//        try {
-//            User userFromDb = userRepository.findUserById(id);
-//            if (userFromDb != null) {
-//                String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
-//                if (userFromDb.getPassword().equals(currentEncrypted)) {
-//                    userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
-//                    userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
-//
-//                    User updatedUser = userRepository.save(userFromDb);
-//                }else{
-//                    throw new RuntimeException("Password does not match");
-//                }
-//
-//            } else {
-//                throw new RuntimeException("User not found");
-//            }
-//
-//            logger.info("Password updated successfully");
-//        } catch (Exception e) {
-//            throw new AppException(String.format("Failed to update user with id %d", id), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+       try {
+           User userFromDb = userRepository.findUserById(id);
+           if (userFromDb != null) {
+               String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
+               if (userFromDb.getPassword().equals(currentEncrypted)) {
+                   userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
+                   userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
+
+                   User updatedUser = userRepository.save(userFromDb);
+               }else{
+                   throw new RuntimeException("Password does not match");
+               }
+
+           } else {
+               throw new RuntimeException("User not found");
+           }
+
+           logger.info("Password updated successfully");
+       } catch (Exception e) {
+           throw new AppException(String.format("Failed to update user with id %d", id), HttpStatus.INTERNAL_SERVER_ERROR);
+       }
 
     }
 }
