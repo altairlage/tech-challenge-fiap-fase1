@@ -19,7 +19,7 @@ public class ChangeUserPasswordUseCase {
     private static final Logger logger = LogManager.getLogger(ChangeUserPasswordUseCase.class);
 
     private final UserRepository userRepository;
-    private AesCryptoImp aesCrypto;
+    private final AesCryptoImp aesCrypto;
 
     public ChangeUserPasswordUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;

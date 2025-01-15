@@ -2,15 +2,14 @@ package com.fiap.GastroHub.modules.users.infra.http;
 
 import com.fiap.GastroHub.modules.users.dtos.ChangeUserPasswordRequest;
 import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserRequest;
-import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserResponse;
-import com.fiap.GastroHub.modules.users.infra.orm.entities.User;
+import com.fiap.GastroHub.modules.users.dtos.UserResponse;
 import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
-import com.fiap.GastroHub.modules.users.usecases.ChangeUserPasswordUseCase;
-import com.fiap.GastroHub.modules.users.usecases.CreateUserUseCase;
-import com.fiap.GastroHub.modules.users.usecases.UpdateUserUseCase;
+import com.fiap.GastroHub.modules.users.usecases.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,6 @@ import java.util.List;
 public class UserController {
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
-    private final UserRepository userRepository;
     private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final ChangeUserPasswordUseCase changeUserPasswordUseCase;
@@ -30,13 +28,12 @@ public class UserController {
     private final GetUserByIdUseCase getUserByIdUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase,
+    public UserController(UserRepository userRepository, CreateUserUseCase createUserUseCase,
                           UpdateUserUseCase updateUserUseCase,
                           ChangeUserPasswordUseCase changeUserPasswordUseCase,
                           GetAllUsersUseCase getAllUsersUseCase,
                           GetUserByIdUseCase getUserByIdUseCase,
                           DeleteUserUseCase deleteUserUseCase) {
-
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.changeUserPasswordUseCase = changeUserPasswordUseCase;
@@ -45,6 +42,13 @@ public class UserController {
         this.deleteUserUseCase = deleteUserUseCase;
     }
 
+    @Operation(summary = "Criar um usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @PostMapping("/create")
     public ResponseEntity<UserResponse> createUser(
             @RequestBody CreateUpdateUserRequest request
@@ -57,6 +61,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @GetMapping
@@ -73,6 +78,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @GetMapping("/{id}")
@@ -85,6 +91,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @PutMapping("/{id}")
@@ -101,9 +108,10 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
-    @PutMapping("/password/{id}")
+    @PutMapping("/{id}/password")
     public ResponseEntity<Void> changeUserPassword(
             @PathVariable("id") Long id,
             @RequestBody ChangeUserPasswordRequest changeUserPasswordRequest
@@ -114,6 +122,13 @@ public class UserController {
         return ResponseEntity.status(status.value()).build();
     }
 
+    @Operation(summary = "Deletar um usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         logger.info("DELETE -> /users/{}", id);
