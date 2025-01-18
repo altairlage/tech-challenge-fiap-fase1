@@ -35,7 +35,7 @@ Este projeto serve como aplicação prática dos conceitos aprendidos durante o 
 
 ## 🛠️ Tecnologias
 
-- ![Java](https://img.shields.io/badge/Java-17-orange)
+- ![Java](https://img.shields.io/badge/Java-21-orange)
 - ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-green)
 - ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue)
 - ![Docker](https://img.shields.io/badge/Docker-latest-blue)
@@ -59,7 +59,7 @@ Este projeto serve como aplicação prática dos conceitos aprendidos durante o 
 
 ### Pré-requisitos 📋
 
-- Java Development Kit (JDK) 17
+- Java Development Kit (JDK) 21
 - Docker e Docker Compose
 - Maven
 - IDE de sua preferência (recomendamos IntelliJ IDEA ou Eclipse)
