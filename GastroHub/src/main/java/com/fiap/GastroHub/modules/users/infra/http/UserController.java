@@ -1,9 +1,6 @@
 package com.fiap.GastroHub.modules.users.infra.http;
 
-import com.fiap.GastroHub.modules.users.dtos.ChangeUserPasswordRequest;
-import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserRequest;
-import com.fiap.GastroHub.modules.users.dtos.UserResponse;
-import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
+import com.fiap.GastroHub.modules.users.dtos.*;
 import com.fiap.GastroHub.modules.users.usecases.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,19 +24,23 @@ public class UserController {
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
+    private final LoginUserUseCase loginUserUseCase;
 
-    public UserController(UserRepository userRepository, CreateUserUseCase createUserUseCase,
+    public UserController(CreateUserUseCase createUserUseCase,
                           UpdateUserUseCase updateUserUseCase,
                           ChangeUserPasswordUseCase changeUserPasswordUseCase,
                           GetAllUsersUseCase getAllUsersUseCase,
                           GetUserByIdUseCase getUserByIdUseCase,
-                          DeleteUserUseCase deleteUserUseCase) {
+                          DeleteUserUseCase deleteUserUseCase,
+                          LoginUserUseCase loginUserUseCase) {
+
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.changeUserPasswordUseCase = changeUserPasswordUseCase;
         this.getAllUsersUseCase = getAllUsersUseCase;
         this.getUserByIdUseCase = getUserByIdUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
+        this.loginUserUseCase = loginUserUseCase;
     }
 
     @Operation(summary = "Criar um usuário")
@@ -134,5 +135,12 @@ public class UserController {
         logger.info("DELETE -> /users/{}", id);
         deleteUserUseCase.execute(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
+        String token = loginUserUseCase.login(loginUserRequest);
+        LoginUserResponse response = new LoginUserResponse(token);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
