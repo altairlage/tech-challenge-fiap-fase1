@@ -20,9 +20,11 @@ import java.util.Map;
 public class LoginUserUseCase {
     private static final Logger logger = LogManager.getLogger(LoginUserUseCase.class);
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public LoginUserUseCase(UserRepository userRepository){
+    public LoginUserUseCase(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public String login(LoginUserRequest loginUserRequest) {
@@ -49,7 +51,7 @@ public class LoginUserUseCase {
                     .compact();
 
             logger.info("Token gerado com sucesso para o usuário: {}", user.getName());
-            return token;
+            return jwtUtil.generateToken(user.getId(), user.getName(), user.getEmail());
         } else {
             throw new AppException("Usuário ou senha inválidos", HttpStatus.UNAUTHORIZED);
         }

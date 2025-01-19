@@ -2,6 +2,7 @@ package com.fiap.GastroHub.modules.users.infra.http;
 
 import com.fiap.GastroHub.modules.users.dtos.*;
 import com.fiap.GastroHub.modules.users.usecases.*;
+import com.fiap.GastroHub.modules.users.util.JwtDecodeUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -83,7 +84,10 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro Interno")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable long id) {
+    public ResponseEntity<UserResponse> getUserById(@RequestHeader("Authorization") String token, @PathVariable long id) {
+
+        JwtUserRequest jwtUserRequest = JwtDecodeUtil.decodeToken(token);
+
         UserResponse userResponse = getUserByIdUseCase.execute(id);
         return ResponseEntity.ok(userResponse);
     }
