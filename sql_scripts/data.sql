@@ -1,8 +1,11 @@
-INSERT INTO gastrohub.`user` (name, address, created_at, email, last_updated_at, username, password)
-VALUES('admin', 'Rua das onças, 100', '2024-10-15', 'admin@gastrohub.com', '2024-10-15', 'admin', 'swordfish');
+INSERT INTO gastrohub.roles (name) VALUES 
+	 ('ROLE_ADMINISTRATOR'),
+	 ('ROLE_CUSTOMER');
 
-INSERT INTO gastrohub.`user` (name, address, created_at, email, last_updated_at, username, password)
-VALUES('José Fulano', 'Rua das couves, 90', '2024-10-15', 'jose_fulano@gmail.com', '2024-10-15', 'jose_fulano', 's3nh4');
+INSERT INTO gastrohub.users (address,created_at,email,last_updated_at,name,password) VALUES
+	 ('Rua das onças, 100','2024-10-25 13:13:13','admin@gastrohub.com','2024-10-25 13:13:13','admin','$2a$10$gOCIURpxosiTIs8CGOm2mOYT4db7Z.2QiE9HZ3upjXkk7JQYm2Q02'), -- swordfish
+	 ('Rua das couves, 90','2024-10-25 13:13:13','jose_fulano@gmail.com','2024-10-25 13:13:13','José Fulano','$10$MR6VmM3T1D.uCkVJlGjovu6G5I7PV8k/CNxvSKxtV3sIRtHciQ3AK'); -- s3nh4
 
-INSERT INTO gastrohub.`user` (name, address, created_at, email, last_updated_at, username, password)
-VALUES('Don Leopoldo', 'Rua das onças, 100', '2024-10-15', 'don@gmail.com', '2024-11-21', 'don_leopoldo', 's3nh4');
+INSERT INTO gastrohub.users_roles (user_id,role_id) VALUES
+	 (1,1),
+	 (2,2);

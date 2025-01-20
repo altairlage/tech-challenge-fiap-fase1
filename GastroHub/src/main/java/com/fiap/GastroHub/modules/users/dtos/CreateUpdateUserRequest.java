@@ -1,5 +1,6 @@
 package com.fiap.GastroHub.modules.users.dtos;
 
+import com.fiap.GastroHub.modules.users.infra.orm.entities.RoleName;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,4 +28,6 @@ public class CreateUpdateUserRequest {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private RoleName role;
 }

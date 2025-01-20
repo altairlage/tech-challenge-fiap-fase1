@@ -1,8 +1,6 @@
 package com.fiap.GastroHub.modules.users.infra.http;
 
-import com.fiap.GastroHub.modules.users.dtos.ChangeUserPasswordRequest;
-import com.fiap.GastroHub.modules.users.dtos.CreateUpdateUserRequest;
-import com.fiap.GastroHub.modules.users.dtos.UserResponse;
+import com.fiap.GastroHub.modules.users.dtos.*;
 import com.fiap.GastroHub.modules.users.usecases.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,13 +21,15 @@ public class UserController {
     private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserByIdUseCase getUserByIdUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
+    private final LoginUseCase loginUseCase;
 
     public UserController(CreateUserUseCase createUserUseCase,
                           UpdateUserUseCase updateUserUseCase,
                           ChangeUserPasswordUseCase changeUserPasswordUseCase,
                           GetAllUsersUseCase getAllUsersUseCase,
                           GetUserByIdUseCase getUserByIdUseCase,
-                          DeleteUserUseCase deleteUserUseCase) {
+                          DeleteUserUseCase deleteUserUseCase,
+                          LoginUseCase loginUseCase) {
 
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
@@ -37,6 +37,15 @@ public class UserController {
         this.getAllUsersUseCase = getAllUsersUseCase;
         this.getUserByIdUseCase = getUserByIdUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
+        this.loginUseCase = loginUseCase;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(
+            @RequestBody LoginUserDto loginUserDto
+    ) {
+        RecoveryJwtTokenDto token = loginUseCase.authenticateUser(loginUserDto);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/create")

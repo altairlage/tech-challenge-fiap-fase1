@@ -5,7 +5,6 @@ import com.fiap.GastroHub.modules.users.infra.orm.entities.User;
 import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
 import com.fiap.GastroHub.shared.AppException;
 import com.fiap.GastroHub.shared.infra.beans.LogBean;
-import com.fiap.GastroHub.shared.infra.crypto.AesCryptoImp;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,9 @@ public class ChangeUserPasswordUseCase {
     private static final Logger logger = LogManager.getLogger(ChangeUserPasswordUseCase.class);
 
     private final UserRepository userRepository;
-    private AesCryptoImp aesCrypto;
 
     public ChangeUserPasswordUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.aesCrypto = new AesCryptoImp();
     }
 
 
@@ -40,9 +37,8 @@ public class ChangeUserPasswordUseCase {
        try {
            User userFromDb = userRepository.findUserById(id);
            if (userFromDb != null) {
-               String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
-               if (userFromDb.getPassword().equals(currentEncrypted)) {
-                   userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
+               if (userFromDb.getPassword().equals(changeUserPasswordRequest.getCurrentPassword())) {
+                   userFromDb.setPassword(changeUserPasswordRequest.getNewPassword());
                    userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
 
                    User updatedUser = userRepository.save(userFromDb);
