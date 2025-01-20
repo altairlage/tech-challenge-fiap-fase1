@@ -45,7 +45,7 @@ public class ChangeUserPasswordUseCase {
                    userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
                    userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
 
-                   User updatedUser = userRepository.save(userFromDb);
+                   userRepository.save(userFromDb);
                }else{
                    throw new RuntimeException("Password does not match");
                }
