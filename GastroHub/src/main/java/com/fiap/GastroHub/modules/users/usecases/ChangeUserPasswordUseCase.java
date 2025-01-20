@@ -38,7 +38,7 @@ public class ChangeUserPasswordUseCase {
         logger.info("Trying to change password from user with id: {}", id);
 
        try {
-           User userFromDb = userRepository.findUserById(id);
+           User userFromDb = userRepository.findUserById(id).orElse(null);
            if (userFromDb != null) {
                String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
                if (userFromDb.getPassword().equals(currentEncrypted)) {
