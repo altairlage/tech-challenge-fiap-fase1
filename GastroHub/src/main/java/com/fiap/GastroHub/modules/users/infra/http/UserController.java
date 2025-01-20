@@ -2,7 +2,6 @@ package com.fiap.GastroHub.modules.users.infra.http;
 
 import com.fiap.GastroHub.modules.users.dtos.*;
 import com.fiap.GastroHub.modules.users.usecases.*;
-import com.fiap.GastroHub.modules.users.util.JwtDecodeUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -86,8 +85,6 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@RequestHeader("Authorization") String token, @PathVariable long id) {
 
-        JwtUserRequest jwtUserRequest = JwtDecodeUtil.decodeToken(token);
-
         UserResponse userResponse = getUserByIdUseCase.execute(id);
         return ResponseEntity.ok(userResponse);
     }
@@ -141,9 +138,16 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Realiza o login do usuário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Não Autorizado"),
+            @ApiResponse(responseCode = "500", description = "Erro Interno")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponse> loginUser(@RequestBody LoginUserRequest loginUserRequest) {
-        String token = loginUserUseCase.login(loginUserRequest);
+        String token = loginUserUseCase.execute(loginUserRequest);
         LoginUserResponse response = new LoginUserResponse(token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

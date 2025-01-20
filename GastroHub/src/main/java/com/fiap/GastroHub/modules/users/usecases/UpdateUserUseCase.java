@@ -26,6 +26,13 @@ public class UpdateUserUseCase {
         this.aesCrypto = new AesCryptoImp();
     }
 
+    /**
+     * Executes the update user use case
+     *
+     * @param id User's id
+     * @param request The object with the user's information to be updated
+     * @return An object confirming the user's changed information
+     **/
     @LogBean
     public UserResponse execute(Long id, CreateUpdateUserRequest request) {
         logger.info("Trying to update a user with the following id: {}", id);

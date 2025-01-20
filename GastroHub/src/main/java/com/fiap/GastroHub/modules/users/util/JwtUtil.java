@@ -20,17 +20,18 @@ public class JwtUtil {
     }
 
     public String generateToken(Long id, String username, String email) {
+        username = username.replace(" ", "").trim();
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", id);
         claims.put("username", username);
         claims.put("email", email);
 
         return Jwts.builder()
-                .setSubject(username)
                 .setClaims(claims)
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, KEY_SECRET)
+                .signWith(KEY_SECRET, SignatureAlgorithm.HS256)
                 .compact();
     }
 

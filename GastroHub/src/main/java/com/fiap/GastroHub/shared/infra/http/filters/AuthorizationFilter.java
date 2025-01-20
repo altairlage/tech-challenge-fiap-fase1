@@ -1,8 +1,6 @@
 package com.fiap.GastroHub.shared.infra.http.filters;
 
-import com.fiap.GastroHub.modules.users.util.JwtDecodeUtil;
 import com.fiap.GastroHub.modules.users.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,12 +28,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException{
-//        String token = (request.getHeader("Authorization"));
-//        if (token == null || token.isEmpty()){
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//            return;
-//        }
-
         requestContext.setRequestId(UUID.randomUUID().toString());
 
         final String authorizationHeader = request.getHeader("Authorization");

@@ -5,6 +5,7 @@ import com.fiap.GastroHub.modules.users.infra.orm.entities.User;
 import com.fiap.GastroHub.modules.users.infra.orm.repositories.UserRepository;
 import com.fiap.GastroHub.modules.users.util.JwtUtil;
 import com.fiap.GastroHub.shared.AppException;
+import com.fiap.GastroHub.shared.infra.beans.LogBean;
 import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +28,14 @@ public class LoginUserUseCase {
         this.jwtUtil = jwtUtil;
     }
 
-    public String login(LoginUserRequest loginUserRequest) {
+    /**
+     * Executes the user login use case
+     *
+     * @param loginUserRequest An object with the login information for the specific user
+     * @return A JWT token
+     **/
+    @LogBean
+    public String execute(LoginUserRequest loginUserRequest) {
         logger.info("Iniciando o processo de login para o email: {}", loginUserRequest.getEmail());
 
         User user = userRepository.findUserByEmail(loginUserRequest.getEmail())
@@ -37,18 +45,6 @@ public class LoginUserUseCase {
 
         if (user.getPassword().equals(loginUserRequest.getPassword())) {
             logger.info("Senha válida para o usuário: {}", user.getName());
-
-            Key keySecret = JwtUtil.getKeySecret();
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("id", user.getId());
-            claims.put("username", user.getName());
-            claims.put("email", user.getEmail());
-
-            String token = Jwts.builder()
-                    .setClaims(claims)
-                    .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                    .signWith(keySecret)
-                    .compact();
 
             logger.info("Token gerado com sucesso para o usuário: {}", user.getName());
             return jwtUtil.generateToken(user.getId(), user.getName(), user.getEmail());

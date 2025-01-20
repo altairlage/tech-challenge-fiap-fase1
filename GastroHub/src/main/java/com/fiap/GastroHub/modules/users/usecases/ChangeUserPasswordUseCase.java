@@ -28,10 +28,10 @@ public class ChangeUserPasswordUseCase {
 
 
     /**
-     * Executes the user creation use case
+     * Executes the user password change use case
      *
+     * @param id The user's id
      * @param changeUserPasswordRequest Object containing the user info
-     * @return Response object with user created successfully
      **/
     @LogBean
     public void execute(Long id, ChangeUserPasswordRequest changeUserPasswordRequest) {

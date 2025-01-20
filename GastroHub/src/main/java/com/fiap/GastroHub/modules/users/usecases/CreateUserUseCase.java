@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class CreateUserUseCase {
@@ -36,7 +38,9 @@ public class CreateUserUseCase {
 
         try {
             User user = modelMapper.map(request, User.class);
-            user = userRepository.save(user);
+            user.setCreatedAt(new Date());
+            user.setLastUpdatedAt(user.getCreatedAt());
+            userRepository.save(user);
             logger.info("New user created successfully");
             return modelMapper.map(user, UserResponse.class);
         } catch (Exception e) {
