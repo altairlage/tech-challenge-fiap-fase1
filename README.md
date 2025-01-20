@@ -122,7 +122,7 @@ O aplicativo estará disponível em `http://localhost:8080`
 
 A documentação da API está disponível através do Swagger UI:
 ```
-http://localhost:8080/swagger-ui.html
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ## 🔍 Estrutura do Projeto
@@ -149,8 +149,4 @@ gastrohub/
 3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
 4. Push para a Branch (`git push origin feature/AmazingFeature`)
 5. Abra um Pull Request
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 

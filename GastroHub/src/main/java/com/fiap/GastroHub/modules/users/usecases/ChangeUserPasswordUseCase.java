@@ -19,7 +19,7 @@ public class ChangeUserPasswordUseCase {
     private static final Logger logger = LogManager.getLogger(ChangeUserPasswordUseCase.class);
 
     private final UserRepository userRepository;
-    private AesCryptoImp aesCrypto;
+    private final AesCryptoImp aesCrypto;
 
     public ChangeUserPasswordUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -28,24 +28,24 @@ public class ChangeUserPasswordUseCase {
 
 
     /**
-     * Executes the user creation use case
+     * Executes the user password change use case
      *
+     * @param id The user's id
      * @param changeUserPasswordRequest Object containing the user info
-     * @return Response object with user created successfully
      **/
     @LogBean
     public void execute(Long id, ChangeUserPasswordRequest changeUserPasswordRequest) {
         logger.info("Trying to change password from user with id: {}", id);
 
        try {
-           User userFromDb = userRepository.findUserById(id);
+           User userFromDb = userRepository.findUserById(id).orElse(null);
            if (userFromDb != null) {
                String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
                if (userFromDb.getPassword().equals(currentEncrypted)) {
                    userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
                    userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
 
-                   User updatedUser = userRepository.save(userFromDb);
+                   userRepository.save(userFromDb);
                }else{
                    throw new RuntimeException("Password does not match");
                }

@@ -20,5 +20,3 @@ services:
       MYSQL_DATABASE: gastrohub
       MYSQL_USER: gastrohub
       MYSQL_PASSWORD: gastrohub
-
-# - mysql_data:/var/lib/mysql
