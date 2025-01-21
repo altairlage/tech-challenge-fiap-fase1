@@ -60,5 +60,7 @@ public class LogAspect {
     public void logError(JoinPoint joinPoint, Exception ex) {
         log.error("[{} : {}][{} ERROR - {}]", joinPoint.getTarget().getClass().getCanonicalName(),
         joinPoint.getSignature().getName(), requestContext.getRequestId(), ex.getMessage());
+//        log.error("Caused By: {}", ex.printStackTrace());
+        ex.printStackTrace();
     }
 }

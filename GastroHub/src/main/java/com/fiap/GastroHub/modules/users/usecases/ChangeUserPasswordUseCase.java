@@ -40,9 +40,9 @@ public class ChangeUserPasswordUseCase {
        try {
            User userFromDb = userRepository.findUserById(id).orElse(null);
            if (userFromDb != null) {
-               String currentEncrypted = this.aesCrypto.encrypt(changeUserPasswordRequest.getCurrentPassword());
+               String currentEncrypted = changeUserPasswordRequest.getCurrentPassword();
                if (userFromDb.getPassword().equals(currentEncrypted)) {
-                   userFromDb.setPassword(this.aesCrypto.encrypt(changeUserPasswordRequest.getNewPassword()));
+                   userFromDb.setPassword(changeUserPasswordRequest.getNewPassword());
                    userFromDb.setLastUpdatedAt(Date.from(Instant.now()));
 
                    userRepository.save(userFromDb);
